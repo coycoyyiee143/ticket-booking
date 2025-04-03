@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Event Booking System - Login</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* General Styles */
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            height: 100vh;
+            background: #f0f0f0;
+        }
+
+        .left-section {
+            flex: 1;
+            background: url('image/background.png') no-repeat center center/cover;
+        }
+
+        .right-section {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #ffffff;
+            box-shadow: -5px 0 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .container {
+            max-width: 400px;
+            width: 100%;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .container img {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            font-size: 28px;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        h2 {
+            font-size: 20px;
+            color: #555;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #007bff;
+            box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+        }
+
+        .btn {
+            width: 100%;
+            padding: 10px;
+            background: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .btn:hover {
+            background: #0056b3;
+        }
+
+        p {
+            margin-top: 15px;
+            font-size: 14px;
+            color: #555;
+        }
+
+        p a {
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        p a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <!-- Left Section with Image -->
+    <div class="left-section"></div>
+
+    <!-- Right Section with Login Form -->
+    <div class="right-section">
+        <div class="container">
+            <!-- Logo -->
+            <img src="image/logo.png" alt="Event Booking Logo">
+
+            <h1>Tickets</h1>
+            <h2>Login</h2>
+
+            <!-- Login Form -->
+            <div class="form-group">
+                <input type="text" id="txtUsername" placeholder="Enter your username">
+            </div>
+            <div class="form-group">
+                <input type="password" id="txtPassword" placeholder="Enter your password">
+            </div>
+            <button class="btn" onclick="login()">Login</button>
+            <p>Don't have an account? <a href="registration.html">Register here</a>.</p>
+        </div>
+    </div>
+
+    <!-- JavaScript Files -->
+    <script src="js/user.js"></script>
+    <script src="js/admin.js"></script>
+    <script src="js/customer.js"></script>
+    <script>
+        function login() {
+            try {
+                const username = document.getElementById("txtUsername").value.trim();
+                const password = document.getElementById("txtPassword").value.trim();
+
+                // Validate input fields
+                if (!username || !password) {
+                    alert("Please fill in all fields.");
+                    return;
+                }
+
+                // Call the static login method from the User class
+                const user = User.login(username, password);
+
+                // Redirect based on role
+                if (user.role === "admin") {
+                    window.location.href = "admin.html";
+                } else if (user.role === "customer") {
+                    window.location.href = "customer.html";
+                } else {
+                    alert("Invalid role. Please contact support.");
+                }
+            } catch (error) {
+                alert(error.message);
+            }
+        }
+    </script>
+</body>
+</html>

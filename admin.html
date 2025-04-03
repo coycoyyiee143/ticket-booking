@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #f4f4f9;
+            color: #333;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            background: #007bff;
+            color: #fff;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .header img {
+            max-width: 50px;
+            height: auto;
+        }
+
+        .header h1 {
+            font-size: 24px;
+            margin: 0;
+        }
+
+        .header .btn.logout {
+            background: #dc3545;
+            color: #fff;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .header .btn.logout:hover {
+            background: #c82333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 20px;
+            background: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            text-align: center;
+            color: #333;
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        .form-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            justify-content: space-between;
+        }
+
+        .form-container .form-group {
+            flex: 1 1 calc(50% - 15px);
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #007bff;
+            box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+        }
+
+        .btn {
+            padding: 10px 15px;
+            background: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .btn:hover {
+            background: #0056b3;
+        }
+
+        #eventList {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .event-card {
+            background: #f9f9f9;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            margin: 15px auto;
+            width: 300px;
+            text-align: center;
+        }
+
+        .event-card h3 {
+            margin: 0 0 10px;
+            font-size: 20px;
+            color: #333;
+        }
+
+        .event-card p {
+            margin: 5px 0;
+            font-size: 14px;
+            color: #555;
+        }
+
+        .event-card img {
+            width: 50px; 
+            max-height: 200px;
+            object-fit: cover;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+
+        .event-card button {
+            margin-top: 10px;
+            padding: 8px 12px;
+            background: #dc3545;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .event-card button:hover {
+            background: #c82333;
+        }
+
+        .refund-item {
+            background: #f9f9f9;
+            padding: 15px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            margin-bottom: 10px;
+            height: auto;
+            width: 200px;
+        }
+
+        .refund-item p {
+            margin: 5px 0;
+            font-size: 14px;
+            color: #555;
+        }
+
+        .refund-item .btn {
+            margin-right: 10px;
+        }
+
+        .refund-item .btn.approve {
+            background: #28a745;
+            color: #fff;
+        }
+
+        .refund-item .btn.reject {
+            background: #dc3545;
+            color: #fff;
+        }
+
+        .refund-item img {
+            width: 100px;
+            max-height: 150px;
+            object-fit: cover;
+            border-radius: 5px;
+            margin: 0 auto 10px;
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header Section -->
+    <header class="header">
+        <img src="image/logo.png" alt="Logo">
+        <h1>Admin Dashboard</h1>
+        <button class="btn logout" onclick="logout()">Logout</button>
+    </header>
+
+    <!-- Main Content -->
+    <div class="container">
+        <h2>Manage Events</h2>
+        <div class="form-container">
+            <div class="form-group">
+                <label for="eventName">Enter Event Name:</label>
+                <input type="text" id="txtEventName" placeholder="Event Name">
+            </div>
+            <div class="form-group">
+                <label for="txtEventVenue">Enter Venue:</label>
+                <input type="text" id="txtEventVenue" placeholder="Venue">
+            </div>  
+            <div class="form-group">
+                <label for="txtEventDate">Select Date:</label>
+                <input type="date" id="txtEventDate">
+            </div>
+            <div class="form-group">
+                <label for="txtEventTime">Select Time:</label>
+                <input type="time" id="txtEventTime">
+            </div>
+            <div class="form-group">
+                <label for="txtEventSeats">Enter Number of Seats:</label>
+                <input type="number" id="txtEventSeats" placeholder="Number of Seats">
+            </div>
+            <div class="form-group">
+                <label for="txtEventPrice">Enter Price per Seat:</label>
+                <input type="number" id="txtEventPrice" placeholder="Price per Seat">
+            </div>
+            <div class="form-group">
+                <label for="txtEventPoster">Upload Event Poster:</label>
+                <input type="file" id="txtEventPoster" accept="image/*">
+            </div>
+        </div>
+        <button class="btn" onclick="addEvent()">Add Event</button>
+
+        <h2>Event List</h2>
+        <div id="eventList"></div>
+    </div>
+
+    <div class="container">
+        <h2>Refund Requests</h2>
+        <div id="refundList"></div>
+    </div>
+
+    <!-- JavaScript Files -->
+    <script src="js/user.js"></script>
+    <script src="js/admin.js"></script>
+    <script src="js/event.js"></script>
+    <script src="js/booking.js"></script>
+    <script>
+        const admin = User.getCurrentUser();
+
+        // Ensure only Admins can access this page
+        if (admin.role !== "admin") {
+            alert("Access denied. Admins only.");
+            window.location.href = "login.html";
+        }
+
+        function addEvent() {
+            try {
+                const name = document.getElementById("txtEventName").value.trim();
+                const date = document.getElementById("txtEventDate").value;
+                const time = document.getElementById("txtEventTime").value;
+                const seats = parseInt(document.getElementById("txtEventSeats").value);
+                const price = parseFloat(document.getElementById("txtEventPrice").value);
+                const venue = document.getElementById("txtEventVenue").value.trim();
+                const posterInput = document.getElementById("txtEventPoster");
+                const poster = posterInput.files[0]; // Get the uploaded file
+
+                // Validate input fields
+                if (!name || !date || !time || !seats || !price || !venue || !poster) {
+                    alert("Please fill in all fields and upload a poster.");
+                    return;
+                }
+
+                // Convert the poster image to a Base64 string
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    const posterBase64 = e.target.result;
+
+                    // Add the event using the Event class
+                    Event.addEvent(name, date, time, seats, price, venue, posterBase64);
+                    alert("Event added successfully!");
+
+                    // Clear the input fields
+                    document.getElementById("txtEventName").value = "";
+                    document.getElementById("txtEventDate").value = "";
+                    document.getElementById("txtEventTime").value = "";
+                    document.getElementById("txtEventSeats").value = "";
+                    document.getElementById("txtEventPrice").value = "";
+                    document.getElementById("txtEventVenue").value = "";
+                    posterInput.value = "";
+
+                    // Refresh the event list
+                    displayEvents();
+                };
+                reader.readAsDataURL(poster); // Read the file as a Base64 string
+            } catch (error) {
+                alert(error.message);
+            }
+        }
+        function displayEvents() {
+            const events = Event.loadEvents();
+            const eventList = document.getElementById("eventList");
+            eventList.innerHTML = "";
+
+            events.forEach(event => {
+                const eventCard = document.createElement("div");
+                eventCard.classList.add("event-card");
+                eventCard.innerHTML = `
+                    <img src="${event.poster}" alt="${event.name} Poster" style="width: 100%; border-radius: 5px; margin-bottom: 10px;">
+                    <h3>${event.name}</h3>
+                    <p>📅 Date: ${event.date} | ⏰ Time: ${event.time}</p>
+                    <p>📍 Venue: ${event.venue}</p>
+                    <p>🎫 Seats: ${event.availableSeats}/${event.seatCount}</p>
+                    <p>💰 Price: ₱${event.pricePerSeat}</p>
+                    <button onclick="deleteEvent(${event.id})">Delete</button>
+                `;
+                eventList.appendChild(eventCard);
+            });
+        }
+        function deleteEvent(eventId) {
+            try {
+                Event.deleteEvent(eventId);
+                alert("Event deleted successfully!");
+                displayEvents();
+            } catch (error) {
+                alert(error.message);
+            }
+        }
+        
+        function confirmRefund(bookingId, isApproved) {
+            try {
+                const bookings = Booking.loadBookings();
+                let booking = null;
+
+                // Loop through bookings to find the matching booking by ID
+                for (let i = 0; i < bookings.length; i++) {
+                    if (bookings[i].id === bookingId) {
+                        booking = bookings[i];
+                        break; // Stop looping once the booking is found
+                    }
+                }
+
+                if (!booking) {
+                    alert("Booking not found.");
+                    return;
+                }
+
+                if (booking.status !== "refund requested") {
+                    alert("This booking is not pending a refund.");
+                    return;
+                }
+
+                // Update the booking status based on admin's decision
+                booking.status = isApproved ? "refund approved" : "refund rejected";
+                Booking.saveBookings(bookings);
+
+                alert(isApproved ? "Refund approved!" : "Refund rejected.");
+                displayRefundRequests(); // Refresh the refund requests list
+            } catch (error) {
+                alert("An error occurred while processing the refund: " + error.message);
+            }
+        }
+
+        function displayRefundRequests() {
+            try {
+                const bookings = Booking.loadBookings();
+                const events = Event.loadEvents(); // Load all events to find the associated event
+                const refundList = document.getElementById("refundList");
+
+                // Clear the list first
+                refundList.innerHTML = "";
+
+                let foundRefundRequests = false; // To check if we have any refund requests
+
+                // Loop through bookings and manually filter out refund requests
+                for (let i = 0; i < bookings.length; i++) {
+                    if (bookings[i].status === "refund requested") {
+                        foundRefundRequests = true;
+
+                        // Manually find the associated event for this booking
+                        let event = null;
+                        for (let j = 0; j < events.length; j++) {
+                            if (events[j].id === bookings[i].eventId) {
+                                event = events[j];
+                                break; // Stop once the event is found
+                            }
+                        }
+
+                        if (!event) {
+                            console.error(`Event not found for booking ID: ${bookings[i].id}`);
+                            continue;
+                        }
+
+                        // Create the refund item UI
+                        const refundItem = document.createElement("div");
+                        refundItem.classList.add("refund-item");
+                        refundItem.innerHTML = `
+                            <img src="${event.poster}" alt="${event.name} Poster" style="width: 100%; border-radius: 5px; margin-bottom: 10px;">
+                            <p><strong>Booking ID:</strong> ${bookings[i].id}</p>
+                            <p><strong>Event Name:</strong> ${event.name}</p>
+                            <p><strong>Customer:</strong> ${bookings[i].username}</p>
+                            <p><strong>Venue:</strong> ${event.venue}</p>
+                            <p><strong>Status:</strong> ${bookings[i].status}</p>
+                            <button onclick="confirmRefund(${bookings[i].id}, true)" class="btn approve">Approve</button>
+                            <button onclick="confirmRefund(${bookings[i].id}, false)" class="btn reject">Reject</button>
+                        `;
+                        refundList.appendChild(refundItem);
+                    }
+                }
+
+                // If no refund requests were found
+                if (!foundRefundRequests) {
+                    refundList.innerHTML = "<p>No refund requests at the moment.</p>";
+                }
+            } catch (error) {
+                console.error("Error displaying refund requests:", error.message);
+            }
+        }
+
+
+        function logout() {
+            User.logout();
+            window.location.href = "login.html";
+        }
+
+        // Display events on page load
+        window.onload = function () {
+            displayEvents();
+            displayRefundRequests();
+        };
+    </script>
+</body>
+</html>

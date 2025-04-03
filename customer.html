@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Dashboard</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+            color: #333;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            background: #007bff;
+            color: #fff;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .header img {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .header h1 {
+            font-size: 24px;
+            margin: 0;
+        }
+
+        .header .btn.logout {
+            background: #dc3545;
+            color: #fff;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .header .btn.logout:hover {
+            background: #c82333;
+        }
+
+        /* Container Styles */
+        .container {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 20px;
+            background: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            text-align: center;
+            color: #333;
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        /* Event List Styles */
+        #eventList {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            justify-content: center;
+        }
+
+        .event-card {
+            background: #fff;
+            padding: 15px;
+            border-radius: 5px;
+            box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+            width: 250px;
+            text-align: center;
+        }
+
+        .event-card h3 {
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+
+        .event-card p {
+            margin: 5px 0;
+            font-size: 14px;
+            color: #555;
+        }
+
+        .event-card button {
+            margin-top: 10px;
+            padding: 8px 12px;
+            background: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .event-card button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        .event-card button:hover:not(:disabled) {
+            background: #0056b3;
+        }
+
+        /* Booking List Styles */
+        #myBookings {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .booking-item {
+            width: 300px;
+            background-color: #fff;
+            padding: 15px;
+            border-radius: 5px;
+            box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+            text-align: left;
+        }
+
+        .booking-item h4 {
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+
+        .booking-item p {
+            margin: 5px 0;
+            font-size: 14px;
+            color: #555;
+        }
+
+        .booking-item canvas {
+            display: block;
+            margin: 10px auto;
+        }
+
+        .booking-item button {
+            margin-top: 10px;
+            padding: 8px 12px;
+            background: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .booking-item button:hover {
+            background: #0056b3;
+        }
+
+        /* General Button Styles */
+        .btn {
+            padding: 8px 12px;
+            background: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .btn:hover {
+            background: #0056b3;
+        }
+
+        .btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        /* Specific Button Styles */
+        .btn.cancel {
+            background: #dc3545;
+        }
+
+        .btn.cancel:hover {
+            background: #c82333;
+        }
+
+        .btn.refund {
+            background: #ffc107;
+            color: #333;
+        }
+
+        .btn.refund:hover {
+            background: #e0a800;
+        }
+
+        .btn.pay {
+            background: #28a745;
+        }
+
+        .btn.pay:hover {
+            background: #218838;
+        }
+
+        /* Align Clear Bookings Button */
+        .clear-bookings-container {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        /* Modal Buttons Alignment */
+        .modal-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+
+        .modal-buttons .btn {
+            flex: 1;
+            margin: 0 5px;
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            width: 80%;
+            max-width: 400px;
+            text-align: center;
+            box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
+            position: relative;
+        }
+
+        .seat {
+            display: inline-block;
+            width: 30px;
+            height: 30px;
+            margin: 5px;
+            background-color: #ccc;
+            border: 1px solid #999;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .seat.selected {
+            background-color: #4caf50;
+        }
+
+        .seat.booked {
+            background-color: #f44336;
+            cursor: not-allowed;
+        }
+
+        .booking-poster {
+            width: 100%;
+            max-height: 200px;
+            object-fit: cover;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+
+        .event-poster {
+            width: 100%;
+            max-height: 150px;
+            object-fit: cover; 
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
+</head>
+<body>
+    <!-- Header Section -->
+    <header class="header">
+        <img src="image/logo.png" alt="Logo">
+        <h1>Customer Dashboard</h1>
+        <button class="btn logout" onclick="logout()">Logout</button>
+    </header>
+
+    <div class="container">
+        <h2>Available Events</h2>
+        <div id="eventList"></div>
+    </div>
+
+    <div class="container">
+        <h2>My Bookings</h2>
+        <div id="myBookings"></div>
+    </div>
+            <!-- Receipt Section -->
+           <div id="modalReceipt" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeModalReceipt()">&times;</span>
+                <h3>Payment Receipt</h3>
+                <div id="receiptDetails">
+                    <p>No payment details available.</p>
+                </div>
+            </div>
+        </div>
+            
+    <!-- Modal for Seat Selection -->
+    <div id="seatModal" class="modal">
+        <div class="modal-content">
+            <h3>Select Seats</h3>
+            <div id="seatLayout"></div>
+            <div class="modal-buttons">
+                <button class="btn" onclick="confirmBooking()">Confirm Booking</button>
+                <button class="btn cancel" onclick="closeModal()">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="clear-bookings-container">
+        <button class="btn cancel" onclick="clearBookings()">Clear All Bookings</button>
+    </div>
+
+    <script src="js/user.js"></script>
+    <script src="js/customer.js"></script>
+    <script src="js/event.js"></script>
+    <script src="js/booking.js"></script>
+    <script>
+        const customer = User.getCurrentUser();
+        let selectedEvent = null;
+        let selectedSeats = [];
+    
+        // Ensure only Customers can access this page
+        if (!(customer instanceof Customer)) {
+            alert("Access denied. Customers only.");
+            window.location.href = "login.html";
+        }
+    
+        function displayEvents() {
+            const events = Event.loadEvents();
+            const eventList = document.getElementById("eventList");
+            eventList.innerHTML = "";
+
+            events.forEach(event => {
+                const eventCard = document.createElement("div");
+                eventCard.classList.add("event-card");
+                eventCard.innerHTML = `
+                    <img src="${event.poster}" alt="${event.name} Poster" class="event-poster">
+                    <h3>${event.name}</h3>
+                    <p>📅 Date: ${event.date} | ⏰ Time: ${event.time}</p>
+                    <p>📍 Venue: ${event.venue}</p>
+                    <p>🎫 Seats: ${event.availableSeats}/${event.seatCount}</p>
+                    <p>💰 Price: ₱${event.pricePerSeat}</p>
+                    <button onclick="openSeatModal(${event.id})" ${event.availableSeats === 0 ? "disabled" : ""}>Book Now</button>
+                `;
+                eventList.appendChild(eventCard);
+            });
+        }
+            
+        // Function to open the seat selection modal
+        function openSeatModal(eventId) {
+            selectedEvent = Event.findEventById(eventId);
+            if (!selectedEvent) {
+                alert("Event not found.");
+                return;
+            }
+    
+            selectedSeats = [];
+            const seatLayout = document.getElementById("seatLayout");
+            seatLayout.innerHTML = "";
+    
+            selectedEvent.seatMap.forEach((seat, index) => {
+                const seatDiv = document.createElement("div");
+                seatDiv.classList.add("seat");
+                if (seat === "booked") {
+                    seatDiv.classList.add("booked");
+                } else {
+                    seatDiv.onclick = function() {
+                        toggleSeatSelection(index, seatDiv);
+                    };
+                }
+                seatLayout.appendChild(seatDiv);
+            });
+    
+            document.getElementById("seatModal").style.display = "block";
+        }
+    
+        function toggleSeatSelection(seatIndex, seatDiv) {
+            // Check if the seat is already selected
+            if (selectedSeats.indexOf(seatIndex) !== -1) {
+                // Deselect the seat
+                selectedSeats.splice(selectedSeats.indexOf(seatIndex), 1);
+                seatDiv.classList.remove("selected");
+            } else {
+                // Select the seat
+                selectedSeats.push(seatIndex);
+                seatDiv.classList.add("selected");
+            }
+        }
+
+    
+        function confirmBooking() {
+            if (selectedSeats.length === 0) {
+                alert("Please select at least one seat.");
+                return;
+            }
+
+            try {
+                // Update the seat map and available seats
+                selectedSeats.forEach(seatIndex => {
+                    if (selectedEvent.seatMap[seatIndex] === "available") {
+                        selectedEvent.seatMap[seatIndex] = "booked"; // Mark seat as booked
+                        selectedEvent.availableSeats--; // Reduce available seats
+                        Booking.addBooking(
+                            selectedEvent.id,
+                            selectedEvent.name,
+                            seatIndex,
+                            selectedEvent.pricePerSeat,
+                            customer.username,
+                            selectedEvent.venue // Pass the venue here
+                        );
+                    }
+                });
+
+             // Save the updated events to localStorage
+                const events = Event.loadEvents();
+                const updatedEvents = [];
+
+                for (let i = 0; i < events.length; i++) {
+                    if (events[i].id === selectedEvent.id) {
+                        // Update the event if IDs match
+                        updatedEvents.push(selectedEvent);
+                    } else {
+                        // Otherwise, keep the original event
+                        updatedEvents.push(events[i]);
+                    }
+                }
+
+                Event.saveEvents(updatedEvents);
+
+
+                alert("Booking successful!");
+                closeModal();
+                displayEvents();
+                displayBookings();
+            } catch (error) {
+                alert("An error occurred while confirming the booking: " + error.message);
+            }
+        }
+    
+        // Function to close the modal
+        function closeModal() {
+            document.getElementById("seatModal").style.display = "none";
+        }
+    
+        function displayBookings() {
+            const bookings = Booking.getBookingsByUser(customer.username);
+            const myBookings = document.getElementById("myBookings");
+            myBookings.innerHTML = "";
+
+            if (bookings.length === 0) {
+                myBookings.innerHTML = "<p>You have no bookings yet.</p>";
+                return;
+            }
+
+            bookings.forEach(booking => {
+                // Validate booking data
+                if (!booking.id || !booking.eventName || !booking.venue) {
+                    console.error("Invalid booking data:", booking);
+                    return;
+                }
+
+                const event = Event.findEventById(booking.eventId); // Find the event to get the poster
+                const bookingCard = document.createElement("div");
+                bookingCard.classList.add("booking-item");
+
+                const qrCodeData = `Booking ID: ${booking.id}\nEvent: ${booking.eventName}\nVenue: ${booking.venue}\nSeat: ${booking.seatIndex + 1}\nPrice: ₱${booking.price}\nStatus: ${booking.status}`;
+                bookingCard.innerHTML = `
+                    <div>
+                        <img src="${event.poster}" alt="${booking.eventName} Poster" class="booking-poster" style="width: 100%; border-radius: 5px; margin-bottom: 10px;">
+                        <h4>${booking.eventName}</h4>
+                        <p>Venue: ${booking.venue}</p>
+                        <p>Seat: ${booking.seatIndex + 1}</p>
+                        <p>Price: ₱${booking.price}</p>
+                        <p>Status: ${booking.status}</p>
+                        <canvas id="qrCode-${booking.id}"></canvas>
+                        ${booking.status === "unpaid" ? `<button onclick="payForBooking(${booking.id})" class="btn pay">Pay</button>` : ""}
+                        ${booking.status === "unpaid" ? `<button onclick="cancelBooking(${booking.id})" class="btn cancel">Cancel</button>` : ""}
+                        ${booking.status === "paid" ? `<button onclick="requestRefund(${booking.id})" class="btn refund">Request Refund</button>` : ""}
+                    </div>
+                `;
+
+                myBookings.appendChild(bookingCard);
+
+                // Generate QR Code
+                const canvas = document.getElementById(`qrCode-${booking.id}`);
+                QRCode.toCanvas(canvas, qrCodeData, function (error) {
+                    if (error) console.error("QR Code Error:", error);
+                });
+            });
+        }
+        
+        function cancelBooking(bookingId) {
+            try {
+                // Show a confirmation dialog
+                const confirmCancel = confirm("Are you sure you want to cancel this booking?");
+                if (!confirmCancel) {
+                    return; // Exit the function if the user cancels
+                }
+
+                // Load all bookings
+                const bookings = Booking.getBookingsByUser(customer.username);
+                const updatedBookings = [];
+                let bookingToCancel = null;
+
+                // Loop through bookings to filter and find the one to cancel
+                for (let i = 0; i < bookings.length; i++) {
+                    if (bookings[i].id !== bookingId) {
+                        updatedBookings.push(bookings[i]); // Keep all other bookings
+                    } else {
+                        bookingToCancel = bookings[i]; // Found the booking to cancel
+                    }
+                }
+
+                // Save the updated bookings back to localStorage
+                Booking.saveBookings(updatedBookings);
+
+                if (bookingToCancel) {
+                    // Restore the seat in the event
+                    const events = Event.loadEvents();
+                    for (let i = 0; i < events.length; i++) {
+                        if (events[i].id === bookingToCancel.eventId) {
+                            // Mark the seat as available
+                            events[i].seatMap[bookingToCancel.seatIndex] = "available";
+                            events[i].availableSeats++; // Increment available seats
+                            Event.saveEvents(events); // Save updated events
+                            break; // No need to continue looping through events
+                        }
+                    }
+
+                    alert("Booking canceled successfully!");
+                    displayBookings();
+                    displayEvents();
+                } else {
+                    alert("Booking not found.");
+                }
+            } catch (error) {
+                alert("An error occurred while canceling the booking: " + error.message);
+            }
+        }
+
+        function clearBookings() {
+            try {
+                // Clear all bookings from localStorage
+                localStorage.removeItem("bookings");
+
+                // Load all events
+                const events = Event.loadEvents();
+
+                // Loop through each event to reset seatMap and availableSeats
+                for (let i = 0; i < events.length; i++) {
+                    // Reset seatMap manually without using fill
+                    events[i].seatMap = [];
+                    for (let j = 0; j < events[i].seatCount; j++) {
+                        events[i].seatMap.push("available"); // Manually add "available" to each seat
+                    }
+                    events[i].availableSeats = events[i].seatCount; // Restore total seats
+                }
+
+                // Save the updated events back to localStorage
+                Event.saveEvents(events);
+
+                // Refresh the UI
+                alert("All bookings have been cleared, and seats have been restored!");
+                displayEvents();
+                displayBookings();
+            } catch (error) {
+                alert("An error occurred while clearing bookings: " + error.message);
+            }
+        }
+
+        function payForBooking(bookingId) {
+            try {
+                // Find the booking by ID
+                const booking = Booking.findBookingById(bookingId);
+                if (!booking) {
+                    alert("Booking not found.");
+                    return;
+                }
+
+                // Prompt the customer to enter the payment amount
+                const enteredAmount = prompt(`The total price for this booking is ₱${booking.price}. Please enter your payment amount:`);
+
+                // Validate the entered amount
+                if (enteredAmount === null) {
+                    // User clicked "Cancel"
+                    alert("Payment canceled.");
+                    return;
+                }
+
+                const paymentAmount = parseFloat(enteredAmount);
+                if (isNaN(paymentAmount) || paymentAmount < booking.price) {
+                    alert(`Invalid payment amount. You must pay at least ₱${booking.price}.`);
+                    return;
+                }
+
+                // Calculate the change
+                const change = paymentAmount - booking.price;
+
+                // Update the booking status to "paid"
+                Booking.updateBookingStatus(bookingId, "paid");
+                alert("Payment successful!");
+
+                // Update the receipt section
+                updateReceiptSection(booking, paymentAmount, change);
+
+                displayBookings();
+            } catch (error) {
+                alert("An error occurred while processing the payment: " + error.message);
+            }
+        }
+
+        function requestRefund(bookingId) {
+            try {
+                // Confirm the refund request
+                const confirmRequest = confirm("Are you sure you want to request a refund?");
+                if (!confirmRequest) return;
+
+                // Update the booking status to "refund requested"
+                Booking.updateBookingStatus(bookingId, "refund requested");
+                alert("Refund requested! Waiting for admin confirmation.");
+                displayBookings();
+            } catch (error) {
+                alert("An error occurred while requesting a refund: " + error.message);
+            }
+        }
+
+        function updateReceiptSection(booking, paymentAmount, change) {
+            const receiptDetails = document.getElementById("receiptDetails");
+            receiptDetails.innerHTML = `
+                <p><strong>Booking ID:</strong> ${booking.id}</p>
+                <p><strong>Event Name:</strong> ${booking.eventName}</p>
+                <p><strong>Venue:</strong> ${booking.venue}</p>
+                <p><strong>Seat:</strong> ${booking.seatIndex + 1}</p>
+                <p><strong>Price:</strong> ₱${booking.price}</p>
+                <p><strong>Payment Amount:</strong> ₱${paymentAmount}</p>
+                <p><strong>Change:</strong> ₱${change.toFixed(2)}</p>
+                <p><strong>Status:</strong> Paid</p>
+            `;
+
+            // Show the modal
+            const modalReceipt = document.getElementById("modalReceipt");
+            modalReceipt.style.display = "flex";
+        }
+
+        function closeModalReceipt() {
+            const modalReceipt = document.getElementById("modalReceipt");
+            modalReceipt.style.display = "none";
+        }
+            
+        // Function to log out
+        function logout() {
+            User.logout();
+            window.location.href = "login.html";
+        }
+    
+        // Display events and bookings on page load
+        window.onload = function () {
+            displayEvents();
+            displayBookings();
+        };
+    </script>
+</body>
+</html>
